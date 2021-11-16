@@ -7,6 +7,7 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 import Cabecalho from '../components/Cabecalho'
 import Rodape from '../components/Rodape'
 import { MdAssessment, MdDelete, MdList, MdModeEdit, MdSave } from 'react-icons/md'
@@ -16,7 +17,7 @@ import Button from 'react-bootstrap/Button'
 import { FormControl, FormGroup, FormLabel, FormSelect } from "react-bootstrap";
 
 const Pedidos = () => {
-    const valorInicial = { Numero: 1, Qnt: "", Descricao: "", Empresa: "", Entrega: "", Valor: 1, Status: true }
+    const valorInicial = { Numero: 1, Qnt: "", Descricao: "",Cliente:"", Empresa: "", Entrega: "", Valor: 1, Status: true }
     const [pedido, setPedido] = useState([valorInicial])
     const [pedidos, setPedidos] = useState([])
     const [carregandoPedidos, setCarregandoPedidos] = useState(false)
@@ -49,16 +50,19 @@ const Pedidos = () => {
         document.title = "Pedidos em carga"
     }, [])
 
-    const validaErrosPedido = () => {
-        const novosErros = {}
-        //Validação do Cliente
-        if (Cliente === '') novosErros.Cliente = 'Preencha todos os campos!'
-        else if(Descricao === "") novosErros.Descricao = 'Informe a descrição do produto'
-        else if(Qnt === "") novosErros.Qnt = 'Informe a Quantidade de venda'
-        
-                return novosErros
-    }
+   const validaErrosPedido = () =>{
+       const novosErros = {}
+       //Validação do Numero
+       if(!Numero || Numero === "") novosErros.Numero = "O Número não pode estar vazio"
+       else if(!Descricao || Descricao === "") novosErros.Descricao = "A Descrioção não pode estar vazia"
+       else if(!Qnt || Qnt === "") novosErros.Qnt = "A Quantidade não pode estar vazia"
+       else if(!Cliente || Cliente === "") novosErros.Cliente = "O campo Cliente não pode estar vazio"
+       else if(!Valor || Valor === "") novosErros.Valor = "O campo valor não pode estar vazio"
 
+
+       return novosErros
+   }
+   
     async function salvarPedido(event) {
         event.preventDefault() // evita que a página seja recarregada
         const novosErros = validaErrosPedido()
@@ -147,7 +151,7 @@ const Pedidos = () => {
                                     <td align="left">{item.Descricao}</td>
                                     <td align="left">{item.Qnt}</td>
                                     <td align="left">{item.Cliente}</td>
-                                    <td align="left">{new Date(item.Entrega).toLocaleDateString('en-US')}</td>
+                                    <td align="left">{new Date(item.Entrega).toLocaleDateString('ja')}</td>
                                     <td align="left">{new Number(item.Valor).toLocaleString('pt-BR')}</td>
                                     <td align="left">{item.Empresa}</td>
                                     <td align="left">{item.Status}</td>
@@ -182,12 +186,12 @@ const Pedidos = () => {
                     {/* Formulário para inserção de pedidos */}
                     <h4><MdAssessment />Cadastro de pedidos</h4>
                     <form method="post">
-                        <Form.Group as={Row} controlId="Numero">
+                        <FormGroup as={Row} controlId="Numero">
                             <Form.Label align="center" column sm={2}>
                                 Numero
                             </Form.Label>
                             <Col sm={7}>
-                                <Form.Control
+                                <FormControl
                                     name="Numero"
                                     placeholder="Ex: 1"
                                     value={Numero}
@@ -195,17 +199,17 @@ const Pedidos = () => {
                                     isInvalid={!!erros.Numero}
                                 />
                             </Col>
-                            <Form.Control.Feedback type='invalid'>
+                            <FormControl.Feedback type='invalid'>
                                 {erros.Numero}
-                            </Form.Control.Feedback>
-                        </Form.Group>
+                            </FormControl.Feedback>
+                        </FormGroup>
                                     &nbsp;
                         <FormGroup as={Row} controlId="Descricao">
                             <Form.Label align="center" column sm={2}>
                                 Descrição
                             </Form.Label>
                             <Col sm={7}>
-                                <Form.Control
+                                <FormControl
                                     name="Descricao"
                                     placeholder="Ex: Bomba"
                                     value={Descricao}
@@ -213,15 +217,15 @@ const Pedidos = () => {
                                     isInvalid={!!erros.Descricao}
                                 />
                             </Col>
-                            <Form.Control.Feedback type='invalid'>
+                            <FormControl.Feedback type='invalid'>
                                 {erros.Descricao}
-                            </Form.Control.Feedback>
+                            </FormControl.Feedback>
                         </FormGroup>
                         &nbsp;
                         <FormGroup as={Row} controlId="Qnt">
                             <FormLabel align="center" column sm={2}>Quantidade</FormLabel>
                             <Col sm={7}>
-                                <Form.Control
+                                <FormControl
                                     name="Qnt"
                                     placeholder="Ex: 1"
                                     value={Qnt}
@@ -229,16 +233,16 @@ const Pedidos = () => {
                                     isInvalid={!!erros.Qnt}
                                 />
                             </Col>
-                            <Form.Control.Feedback type='invalid'>
+                            <FormControl.Feedback type='invalid'>
                                 {erros.Qnt}
-                            </Form.Control.Feedback>
+                            </FormControl.Feedback>
                         </FormGroup>
 
                         &nbsp;
                         <FormGroup as={Row} controlId="Cliente">
                             <FormLabel align="center" column sm={2}>Cliente</FormLabel>
                             <Col sm={7}>
-                                <Form.Control
+                                <FormControl
                                     name="Cliente"
                                     placeholder="Ex: SANASA"
                                     value={Cliente}
@@ -246,9 +250,9 @@ const Pedidos = () => {
                                     isInvalid={!!erros.Cliente}
                                 />
                             </Col>
-                            <Form.Control.Feedback type='invalid'>
+                            <FormControl.Feedback type='invalid'>
                                 {erros.Cliente}
-                            </Form.Control.Feedback>
+                            </FormControl.Feedback>
                         </FormGroup>
 
                         &nbsp;
@@ -256,7 +260,7 @@ const Pedidos = () => {
                         <FormGroup as={Row} controlId="Entrega">
                             <FormLabel align="center" column sm={2}>Data de entrega</FormLabel>
                             <Col sm={7}>
-                            <Form.Control
+                            <FormControl
                                     name="Entrega"
                                     placeholder="Ex:"
                                     value={Entrega}
@@ -269,42 +273,42 @@ const Pedidos = () => {
                         <FormGroup as={Row} controlId="Valor">
                             <FormLabel align="center" column sm={2}>Valor</FormLabel>
                             <Col sm={7}>
-                                <Form.Control
+                                <FormControl
                                     name="Valor"
                                     value={Valor}
                                     onChange={alteraDadosPedido}
                                     isInvalid={!!erros.Valor}
                                 />
                             </Col>
-                            <Form.Control.Feedback type='invalid'>
+                            <FormControl.Feedback type='invalid'>
                                 {erros.Valor}
-                            </Form.Control.Feedback>
+                            </FormControl.Feedback>
                         </FormGroup>
                         &nbsp;
                         <FormGroup as={Row} controlId="Empresa">
                             <FormLabel align="center" column sm={2}>Empresa</FormLabel>
                             <Col sm={7}>
-                                <Form.Select name="Empresa"
+                                <FormSelect name="Empresa"
                                     value={Empresa}
                                     onChange={alteraDadosPedido}  >
                                     <option>Selecione a empresa</option>
                                     <option value="Glass">Glass</option>
                                     <option value="Lamor">Lamor</option>
                                     <option value="Aquamec">Aquamec</option>
-                                </Form.Select>
+                                </FormSelect>
                             </Col>
                         </FormGroup>
                         &nbsp;
                         <FormGroup as={Row}  controlId="Status">
                             <FormLabel align="center" column sm={2}>Status</FormLabel>
                             <Col sm={7}>
-                                <Form.Select name="Status"
+                                <FormSelect name="Status"
                                     value={Status}
                                     onChange={alteraDadosPedido}  >
                                     <option>Selecione o Status</option>
                                     <option value="Desenvolvimento">Desenvolvimento</option>
                                     <option value="Finalizado">Finalizado</option>
-                                </Form.Select>
+                                </FormSelect>
                             </Col>
                         </FormGroup>
 
