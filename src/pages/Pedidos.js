@@ -6,6 +6,9 @@ import Spinner from "react-bootstrap/Spinner";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './Pedidos.css'
+import Toast from 'react-bootstrap/Toast'
+import Modal from 'react-bootstrap/Modal'
 
 
 import Cabecalho from '../components/Cabecalho'
@@ -17,7 +20,7 @@ import Button from 'react-bootstrap/Button'
 import { FormControl, FormGroup, FormLabel, FormSelect } from "react-bootstrap";
 
 const Pedidos = () => {
-    const valorInicial = { Numero: 1, Qnt: "", Descricao: "",Cliente:"", Empresa: "", Entrega: "", Valor: 1, Status: true }
+    const valorInicial = { Numero: 1, Qnt: "", Descricao: "", Cliente: "", Empresa: "", Entrega: "", Valor: 1, Status: true }
     const [pedido, setPedido] = useState([valorInicial])
     const [pedidos, setPedidos] = useState([])
     const [carregandoPedidos, setCarregandoPedidos] = useState(false)
@@ -31,6 +34,8 @@ const Pedidos = () => {
     //Somando os valores totais dos pedidos em desenvolvimento.    
     const desenvolvimento = pedidos.filter(d => d.Status === 'Desenvolvimento')
     const valorTotal = desenvolvimento.reduce((acc, p) => acc + p.Valor, 0)
+
+
     async function obterPedidos() {
         setCarregandoPedidos(true)
         let url = `${BACKEND}/pedidos`
@@ -50,19 +55,18 @@ const Pedidos = () => {
         document.title = "Pedidos em carga"
     }, [])
 
-   const validaErrosPedido = () =>{
-       const novosErros = {}
-       //Validação do Numero
-       if(!Numero || Numero === "") novosErros.Numero = "O Número não pode estar vazio"
-       else if(!Descricao || Descricao === "") novosErros.Descricao = "A Descrioção não pode estar vazia"
-       else if(!Qnt || Qnt === "") novosErros.Qnt = "A Quantidade não pode estar vazia"
-       else if(!Cliente || Cliente === "") novosErros.Cliente = "O campo Cliente não pode estar vazio"
-       else if(!Valor || Valor === "") novosErros.Valor = "O campo valor não pode estar vazio"
+    const validaErrosPedido = () => {
+        const novosErros = {}
+        //Validação do Numero
+        if (!Numero || Numero === "") novosErros.Numero = "O Número não pode estar vazio"
+        else if (!Descricao || Descricao === "") novosErros.Descricao = "A Descrição não pode estar vazia"
+        else if (!Qnt || Qnt === "") novosErros.Qnt = "A Quantidade não pode estar vazia"
+        else if (!Cliente || Cliente === "") novosErros.Cliente = "O campo Cliente não pode estar vazio"
+        else if (!Valor || Valor === "") novosErros.Valor = "O campo valor não pode estar vazio"
 
+        return novosErros
+    }
 
-       return novosErros
-   }
-   
     async function salvarPedido(event) {
         event.preventDefault() // evita que a página seja recarregada
         const novosErros = validaErrosPedido()
@@ -82,34 +86,34 @@ const Pedidos = () => {
                 },
                 body: JSON.stringify(pedido)
             }).then(response => response.json())
-            .then(data => {
-                (data._id || data.message) ? setAviso('Registro salvo com sucesso') : setAviso('')
-                setPedido(valorInicial) //limpar a tela com os valores iniciais
-                obterPedidos() //Atualizar a tela com os registros atualizados
-            }).catch(function (error){
-                console.error(`Erro ao salvar a categoria: ${error.message}`)
-            })
+                .then(data => {
+                    (data._id || data.message) ? setAviso('Registro salvo com sucesso') : setAviso('')
+                    setPedido(valorInicial) //limpar a tela com os valores iniciais
+                    obterPedidos() //Atualizar a tela com os registros atualizados
+                }).catch(function (error) {
+                    console.error(`Erro ao salvar a categoria: ${error.message}`)
+                })
             setSalvandoPedidos(false)
         }
     }
 
-   /*  async function excluirCategoria(){
-        let url = `${BACKEND}/categorias/${categoria._id}`
-        await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json())
-        .then(data => {
-            data.message ? setAviso(data.message) : setAviso('')
-            obterCategorias()
-        })
-        .catch(function (error) {
-            console.error(`Erro ao excluir a categoria: ${error.message}`)
-        })
-    } */
+     async function excluirPedido(){
+         let url = `${BACKEND}/pedidos/${pedido._id}`
+         await fetch(url, {
+             method: 'DELETE',
+             headers: {
+                 Accept: 'application/json',
+                 'Content-Type': 'application/json'
+             }
+         }).then(response => response.json())
+         .then(data => {
+             data.message ? setAviso(data.message) : setAviso('')
+             obterPedidos()
+         })
+         .catch(function (error) {
+             console.error(`Erro ao excluir o pedido: ${error.message}`)
+         })
+     }
 
     const alteraDadosPedido = e => {
         setPedido({ ...pedido, [e.target.name]: e.target.value })
@@ -164,6 +168,10 @@ const Pedidos = () => {
                                         </Button>
                                         &nbsp;
                                         <Button variant="outline-danger" title="Apagar o registro"
+                                        onClick={() => {
+                                            setConfirmaExclusao(true)
+                                            setPedido(item)
+                                        }}
                                         >
                                             <MdDelete />
                                         </Button>
@@ -203,7 +211,7 @@ const Pedidos = () => {
                                 {erros.Numero}
                             </FormControl.Feedback>
                         </FormGroup>
-                                    &nbsp;
+                        &nbsp;
                         <FormGroup as={Row} controlId="Descricao">
                             <Form.Label align="center" column sm={2}>
                                 Descrição
@@ -260,14 +268,14 @@ const Pedidos = () => {
                         <FormGroup as={Row} controlId="Entrega">
                             <FormLabel align="center" column sm={2}>Data de entrega</FormLabel>
                             <Col sm={7}>
-                            <FormControl
+                                <FormControl
                                     name="Entrega"
                                     placeholder="Ex:"
                                     value={Entrega}
                                     onChange={alteraDadosPedido}
                                     isInvalid={!!erros.Entrega}
                                 />
-                                </Col>
+                            </Col>
                         </FormGroup>
                         &nbsp;
                         <FormGroup as={Row} controlId="Valor">
@@ -299,7 +307,7 @@ const Pedidos = () => {
                             </Col>
                         </FormGroup>
                         &nbsp;
-                        <FormGroup as={Row}  controlId="Status">
+                        <FormGroup as={Row} controlId="Status">
                             <FormLabel align="center" column sm={2}>Status</FormLabel>
                             <Col sm={7}>
                                 <FormSelect name="Status"
@@ -323,6 +331,42 @@ const Pedidos = () => {
                     </form>
                 </Col>
             </Row>
+            <Toast
+                onClose={() => setAviso('')}
+                show={aviso.length > 0}
+                animation={false}
+                delay={4000}
+                autohide
+                className="bg-success"
+                style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10
+                }}>
+                <Toast.Header closeButton={false}>Aviso</Toast.Header>
+                <Toast.Body>{aviso}</Toast.Body>
+            </Toast>
+            <Modal animation={false} show={confirmaExclusao}
+            onHide={()=> setConfirmaExclusao(false)}>
+                <Modal.Header>
+                    <Modal.Title>Confirmação da Exclusão</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Confirma a exclusão do pedido selecionado?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => setConfirmaExclusao(!confirmaExclusao)}>
+                    ❌Cancelar
+                    </Button>
+                    <Button variant="success"
+                    onClick={() => {
+                        excluirPedido()
+                        setConfirmaExclusao(!confirmaExclusao)
+                    }}>
+                    ✅Confirmar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Rodape />
         </Container>
     )
