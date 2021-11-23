@@ -1,0 +1,87 @@
+.valorestotal{
+  text-align: left;
+  font-weight: bold;
+  color: black;
+  background-color: #009879;
+  
+  border: 1px solid #060b26;
+  font-size: 15px;
+  top: 0;
+  bottom: 0;
+  left: 16px;
+  right: 0;                                                   
+}
+
+body{
+  overflow-x: hidden;
+  }
+
+
+.tabelafim{
+  border-collapse: collapse;  
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.tabelafim thead tr {
+  background-color: #009879;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.tabelafim th,
+.tabelafim td{
+  padding: 12px 15px;
+}
+
+.tabelafim tbody tr{
+  border-bottom: 1px solid #ddd;
+}
+
+.tabelafim tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.tabelafim tbody tr:last-of-type{
+  border-bottom: 2px solid #009879;
+}
+.qnt,.valor,.numero{
+  width: 1px;
+}
+.status,.entrega,.empresa{
+  width: 111px;
+}
+
+.Plmds{  
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+
+.tabelafim tbody tr:hover {
+  color: #2c3035;
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+
+
+.divForm{
+  border-collapse: collapse;  
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+
+
+

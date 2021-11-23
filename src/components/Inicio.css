@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo&family=Poppins:wght@300&family=Roboto:ital,wght@0,300;1,400&display=swap');
+
+
+
+
+
+.Imagem:hover{
+  z-index: 1;
+  transform: scale(1.05);
+  box-shadow: 0 25px 40px rgba(0, 0, 0. .5);
+  filter: blur(6px);
+}
+
+  
+
+
+.Linha{
+  padding: 1.5rem;
+  overflow-y: hidden;
+}
+
+
+.Imagem img{
+  overflow: hidden;
+  height: 800px;
+  width: 100%;
+  border-radius: 5px 5px 5px 5px;
+  border: 2px solid #060b26;
+  background: #060b26;  
+
+
+}
+
+h3{
+  font-family: 'Heebo', sans-serif;
+  font-weight: bold;
+  position: absolute;  
+  top: 700px;
+  padding: 0 280px;
+  z-index: 1;
+  display: flex;
+  color: aliceblue;
+  transition: 0.5s;
+  transform: translateY(200px);
+}
+
+p{
+  
+  font-family: 'Heebo', sans-serif;
+  position: absolute;
+  top: 800px;
+  font-size: 16px;
+  padding: 0 260px;
+  z-index: 1;
+  display: flex;
+  color: aliceblue;
+  transition: 0.5s;
+  transform: translateY(200px);
+}
+
+:hover h3{
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+:hover p{
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}

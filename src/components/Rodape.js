@@ -1,16 +1,16 @@
 import React from "react";
-import { Navbar, NavbarBrand } from "react-bootstrap";
+import { Navbar} from "react-bootstrap";
+import './Rodape.css'
 
 import {MdAssessment} from 'react-icons/md'
 
 const Rodape = () =>{
     return(
-        <Navbar bg="dark" fixed="bottom">
-            <Navbar.Brand className="text-light">
-                <MdAssessment/> aQuamec &copy; - Todos os direitos reservados
-            </Navbar.Brand>
-
-        </Navbar>
+        <Navbar className="Rodape" bg="#060b26" fixed="bottom">
+        <Navbar.Brand className="text-light" >
+           <MdAssessment/>  ControlOrder &copy; - Todos os direitos reservados
+        </Navbar.Brand>
+    </Navbar>
     )
 }
 

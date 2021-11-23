@@ -1,6 +1,7 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Rotas from "./routes/Rotas";
+import './components/App.css'
 
 
 const App = () => {
